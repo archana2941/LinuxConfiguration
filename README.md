@@ -41,11 +41,10 @@ Go to networking tab (aws lightsail) and  add 2200 to the available port in ligh
 chmod 600 key.pem</li>
 <li>
 To sort out the login issue:
-sudo nano /etc/ssh/sshd_config
-set Password Authentication to "yes" 
+sudo nano /etc/ssh/sshd_config<br/>
+set Password Authentication to "yes"<br/> 
 sudo service ssh restart
 </li>
-
 Configure the Uncomplicated Firewall (UFW)
 <ul>
 <li>sudo ufw status</li>
@@ -56,7 +55,5 @@ Configure the Uncomplicated Firewall (UFW)
  <li>sudo ufw allow 123/udp</li>
  <li>sudo ufw enable</li>
 </ul>
-<li>
-ssh grader@54.210.157.61 -p 2200 -i key-pair.pem
-</li>
+
 </ul>
