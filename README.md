@@ -52,7 +52,7 @@ Change PasswordAuthentication from no to yes.
 
 <li>Download the key-pair (.pem file) for your instance from lightsail.</li>
 <li>Grant it the specific permissions by running command:
-    chmod 600 key.pem</li>
+    chmod 600 ItemCatalog.pem</li>
 </ul>
 
 </li>
@@ -77,11 +77,11 @@ On your local machine generate SSH key pair with: ssh-keygen
 </li>
 <li>save keygen file in your ssh directory: example /Users/username/.ssh/linuxkey</li>
 <li>If  you add password you will be prompted to type it  every time you login </li>
-<li>So now login to grader account by command:<br>ssh grader@Your-Public-IP-Address -p 2200 -i key.pem </li>
+<li>So now login to grader account by command:<br>ssh grader@Your-Public-IP-Address -p 2200 -i ItemCatalog.pem </li>
 <li>
 Make ssh directory: mkdir .ssh
 </li>
-<li>Read the content of your public key: cat .ssh/linuxkey.pub </li>
+<li>Read the content of your public key: cat .ssh/catalog.pub </li>
 <li>In .ssh directory make a file to store your key:touch .ssh/authorized_keys and paste content you read in previous step </li>
 <li>Save your file</li>
 <li>Now we need to set permissions:<br>
@@ -91,7 +91,7 @@ Make ssh directory: mkdir .ssh
 <li>nano /etc/ssh/sshd_config and set PasswordAuthentication from yes back to no. Save  the file </li>
 </ul>
 <li>Now you can login by:<br/>
-ssh grader@your-Public-IP-Address* -p 2200 -i ~/.ssh/linuxkey
+ssh grader@your-Public-IP-Address* -p 2200 -i ~/.ssh/catalog
 </li>
 </li>
 </ul>	
@@ -107,7 +107,7 @@ Installing Apache
 <li>Configure Apache to handle requests using the WSGI module:
 <ul>
 <li>sudo nano /etc/apache2/sites-enabled/000-default.conf</li>
-<li>add WSGIScriptAlias / /var/www/html/myapp.wsgi before </VirtualHost> closing line</li>
+<li>add WSGIScriptAlias / /var/www/html/catalog.wsgi before </VirtualHost> closing line</li>
 <li>Save file.</li>
 </ul>
 
@@ -127,24 +127,18 @@ Install git: sudo apt-get install git
 <li>To create flask app (Deployment)
 <ul>
 <li>cd /var/www</li>
-<li>sudo mkdir catalog2</li>
-<li>cd catalog2</li>
-<li>sudo mkdir catalog2</li>
-<li>cd catalog2</li>
-
+<li>sudo mkdir catalog</li>
+<li>Change the owner of catalog directory: sudo chown -R grader:grader /var/www/catalog</li>
+<li>cd catalog</li>
 </ul>
 
 <ul>
 <li>Clone your github repository for  item-catalog project:<br>
-sudo git clone https://github.com/YOUR-FILE-PATH
+sudo git clone https://github.com/YOUR-FILE-PATH catalog
 </li>
-<li>Move the files from cloned directory to catalog2 directory:<br>
-mv /var/www/catalog2/Item-catalog/* /var/www/catalog2/catalog2/
-</li>
-<li>Remove Item-catalog directory: sudo rm -r Item-catalog </li>
 <li>Make .git directory inaccessible via browser: 
 <ul>
-<li>cd /var/www/catalog2/</li>
+<li>cd /var/www/catalog/</li>
 <li>sudo nano .htaccess</li>
 <li>Paste in the file RedirectMatch 404 /\.git and save  file</li>
 </ul>
@@ -155,10 +149,6 @@ mv /var/www/catalog2/Item-catalog/* /var/www/catalog2/catalog2/
 install flask and other dependencies:
 <ul>
 <li>sudo apt-get install python-pip</li>
-<li>sudo pip install virtualenv</li>
-<li>sudo virtualenv venv</li>
-<li>sudo chmod -R 777 venv</li>
-<li>source venv/bin/activate</li>
 <li>pip install Flask</li>
 <li>pip install httplib2</li>
 <li>pip install requests</li>
@@ -166,44 +156,43 @@ install flask and other dependencies:
 <li>sudo pip install sqlalchemy</li>
 <li>pip install Flask-SQLAlchemy</li>
 <li>sudo pip install python-psycopg2</li>
-<li>deactivate</li>
 </ul>
 </li>
 <li>
-Create host config file:<br> sudo nano /etc/apache2/sites-available/catalog2.conf and paste the following:<br/>
+Make changes in config file:<br> sudo nano /etc/apache2/sites-available/000-default.conf and paste the following:<br/>
 			
 			<VirtualHost *:80>
-  				ServerName 52.57.203.190
-  				ServerAdmin admin@52.57.203.190
-  				WSGIScriptAlias / /var/www/catalog2/catalog2.wsgi
-  				<Directory /var/www/catalog2/catalog2/>
-      				Order allow,deny
-      				Allow from all
+  				ServerName 52.66.161.124
+  				
+  				WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+  				<Directory /var/www/catalog/>
+      					Order allow,deny
+      					Allow from all
   				</Directory>
-  				Alias /static /var/www/catalog2/catalog2/static
-  				<Directory /var/www/catalog2/catalog2/static/>
-      			Order allow,deny
-      			Allow from all
+  				Alias /static /var/www/catalog/static
+  				<Directory /var/www/catalog/static/>
+      					Order allow,deny
+      					Allow from all
   				</Directory>
-  				ErrorLog ${APACHE_LOG_DIR}/error.log
-  				LogLevel warn
-  				CustomLog ${APACHE_LOG_DIR}/access.log combined
-			</VirtualHost>	
+				 ErrorLog ${APACHE_LOG_DIR}/error.log
+				 LogLevel warn
+				 CustomLog ${APACHE_LOG_DIR}/access.log combined
+			</VirtualHost>
 </li>
 <li>
 Save above file.
 </li>
-<li>sudo a2ensite catalog2.conf</li>
-<li>cd /var/www/catalog2</li>
+
+<li>cd /var/www/catalog</li>
 <li>Create wsgi file and save it:<br>
-sudo nano catalog2.wsgi and  paste follwing:
+sudo nano catalog.wsgi and  paste follwing:
       #!/usr/bin/python
       import sys
       import logging
       logging.basicConfig(stream=sys.stderr)
-      sys.path.insert(0,"/var/www/catalog2/")
-      from catalog2 import app as application
-      application.secret_key = 'Add your secret key'
+      sys.path.insert(0,"/var/www/catalog/")
+      from project import app as application
+      
   			
 </li>
 <li>sudo service apache2 restart
@@ -219,18 +208,16 @@ Install and configure PostgreSQL:
 <ul>
 <li>Install postgres: sudo apt-get install postgresql</li>
 <li>config database_setup.py : sudo nano database_setup.py</li>
-<li>python engine = create_engine('postgresql://catalog:db-password@localhost/catalog2')</li>
+<li>python engine = create_engine('postgresql://catalog:'Your-pswd'@localhost/catalog')</li>
 <li>repeat for project.py (your main app)</li>
-<li>mv project.py __init__.py (cd /var/www/catalog2/catalog2/__init__.py)</li>
-<li>Add a user: sudo adduser catalog2</li>
+<li>Add a user: sudo adduser catalog</li>
 <li>Login to posgres: sudo su - postgres</li>
 <li>psql</li>
-<li>CREATE USER catalog2 WITH PASSWORD 'db-password';</li>
-<li>To change role of catalog2 user: ALTER USER catalog CREATEDB;</li>
-<li>Create  a new database : CREATE DATABASE catalog2 WITH OWNER catalog2;</li>
-<li>Connect to database: \c catalog2</li>
+<li>CREATE USER catalog WITH PASSWORD 'sillypassword';</li>
+<li>Create  a new database : CREATE DATABASE catalog WITH OWNER catalog;</li>
+<li>Connect to database: \c catalog</li>
 <li>REVOKE ALL ON SCHEMA public FROM public;</li>
-<li>GRANT ALL ON SCHEMA public TO catalog2;</li>
+<li>GRANT ALL ON SCHEMA public TO catalog;</li>
 <li>Quit posgres by typing \q</li>
 <li>exit</li>
 <li>setup your database: python database_setup.py</li>
