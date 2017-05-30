@@ -2,7 +2,7 @@
 <ul>
 <li>Public IP: 52.66.161.124</li>
 <li>SSH Port: 2200</li>
-<li>Full URL: http://ec2-52-66-161-124.ap-south-1.compute.amazonaws.com/login</li>
+<li>Full URL: http://ec2-52-66-161-124.ap-south-1.compute.amazonaws.com</li>
 <li>
 To update all packages on the server run:
 </li>
