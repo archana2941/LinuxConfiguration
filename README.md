@@ -1,8 +1,8 @@
 # LinuxConfiguration
 <ul>
-<li>Public IP: 52.57.203.190</li>
+<li>Public IP: 52.66.161.124</li>
 <li>SSH Port: 2200</li>
-
+<li>Full URL: http://ec2-52-66-161-124.ap-south-1.compute.amazonaws.com/login</li>
 <li>
 To update all packages on the server run:
 </li>
@@ -240,6 +240,6 @@ Install and configure PostgreSQL:
 <li>sudo service apache2 restart</li>
 <li>Add the public IP address back into the Google Developer console and Facebook developer console</li>
 </li>
-
+<li>References for this project:<a href="https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps">Digital Ocean</a> </li>
 
 </ul>
