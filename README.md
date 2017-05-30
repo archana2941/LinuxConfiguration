@@ -16,6 +16,7 @@ sudo apt-get upgrade
 </li>
 <li>
 Create a new user account named "grader"
+Set it's password. example I set it to zxcvbnm
 </li>
 <li>
 <ul>
