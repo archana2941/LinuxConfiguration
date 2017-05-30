@@ -1,4 +1,6 @@
 # LinuxConfiguration
+#Project Overview:
+A baseline installation of a Linux distribution on a virtual machine and prepare it to host web applications, to include installing updates, securing it from a number of attack vectors and installing/configuring web and database servers.	
 <ul>
 <li>Public IP: 52.66.161.124</li>
 <li>SSH Port: 2200</li>
@@ -75,7 +77,7 @@ Create ssh keys
 <li>
 On your local machine generate SSH key pair with: ssh-keygen
 </li>
-<li>save keygen file in your ssh directory: example /Users/username/.ssh/linuxkey</li>
+<li>save keygen file in your ssh directory: example /Users/username/.ssh/ItemCatalog</li>
 <li>If  you add password you will be prompted to type it  every time you login </li>
 <li>So now login to grader account by command:<br>ssh grader@Your-Public-IP-Address -p 2200 -i ItemCatalog.pem </li>
 <li>
@@ -162,8 +164,8 @@ install flask and other dependencies:
 Make changes in config file:<br> sudo nano /etc/apache2/sites-available/000-default.conf and paste the following:<br/>
 			
 			<VirtualHost *:80>
-  				ServerName 52.66.161.124
-  				
+  				ServerName www.xyz.com
+				 ServerAdmin xyz@localhost
   				WSGIScriptAlias / /var/www/catalog/catalog.wsgi
   				<Directory /var/www/catalog/>
       					Order allow,deny
